@@ -31,6 +31,12 @@ public class ScrollingActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
+        Bundle bundle = intent.getExtras().isEmpty()? new Bundle():intent.getExtras();
+        String title = bundle.get("lesson_title") == null ? "Lesson Fault": (String) bundle.get("lesson_title");
+//        String sInfomat = getResources().getString(R.string.lesson_title);
+//        String sFinalInfo = String.format(sInfomat,title);
+        this.setTitle(title);
+
     }
 
     @Override
@@ -52,5 +58,12 @@ public class ScrollingActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void show_lesson_englishView(){
+
+    }
+    public void show_lesson_chineseView(){
+
     }
 }

@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.ScrollingActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/lesson_title"/>
 
     </application>
 

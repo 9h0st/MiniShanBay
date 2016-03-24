@@ -3,7 +3,6 @@ package com.minishanbay.ghost.minishanbay.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,40 +24,40 @@ import java.util.Map;
  */
 public class MainListActivity extends AppCompatActivity {
     private ExpandableListView listView = null;
-    private List<String> parent = null;
+    private List<String> mparent = null;
     Map<String,List<String>> map = null;
 
 
     public void initData() {
-        parent = new ArrayList<String>();
-        parent.add("Lesson1");
-        parent.add("Lesson2");
-        parent.add("Lesson3");
-        parent.add("Lesson4");
+        mparent = new ArrayList<String>();
+        mparent.add("Lesson1");
+        mparent.add("Lesson2");
+        mparent.add("Lesson3");
+        mparent.add("Lesson4");
 
         map = new HashMap<String, List<String>>();
         List<String> list1 = new ArrayList<String>();
         list1.add("Finding fossil man");
         list1.add("发现化石人");
-        list1.add("Volcaburary");
+        list1.add("New words and expressions");
         map.put("Lesson1",list1);
 
         List<String> list2 = new ArrayList<String>();
         list2.add("Spare that spider");
         list2.add("不要伤害蜘蛛");
-        list2.add("Volcaburary");
+        list2.add("New words and expressions");
         map.put("Lesson2",list2);
 
         List<String> list3 = new ArrayList<String>();
         list3.add("Matterhorn man");
         list3.add("马特霍恩山区人");
-        list3.add("Volcaburary");
+        list3.add("New words and expressions");
         map.put("Lesson3",list3);
 
         List<String> list4 = new ArrayList<String>();
         list4.add("Seeing hands");
         list4.add("能看见东西的手");
-        list4.add("Volcaburary");
+        list4.add("New words and expressions");
         map.put("Lesson4",list4);
     }
 
@@ -74,26 +73,26 @@ public class MainListActivity extends AppCompatActivity {
 
             @Override
             public int getGroupCount() {
-                return parent.size();
+                return mparent.size();
             }
 
             //获取当前父item下的子item的个数
             @Override
             public int getChildrenCount(int groupPosition) {
-                String key = parent.get(groupPosition);
+                String key = mparent.get(groupPosition);
                 return map.get(key).size();
             }
 
             //获得当前父Item的数据
             @Override
             public Object getGroup(int groupPosition) {
-                return parent.get(groupPosition);
+                return mparent.get(groupPosition);
             }
 
             //得到子Item需要关联的数据
             @Override
             public Object getChild(int groupPosition, int childPosition) {
-                String key = parent.get(groupPosition);
+                String key = mparent.get(groupPosition);
                 return map.get(key).get(childPosition);
             }
 
@@ -123,14 +122,14 @@ public class MainListActivity extends AppCompatActivity {
                 }
                 TextView tv = (TextView) convertView
                         .findViewById(R.id.parent_item);
-                tv.setText(MainListActivity.this.parent.get(groupPosition));
+                tv.setText(MainListActivity.this.mparent.get(groupPosition));
                 return convertView;
             }
 
             //设置子Item组件
             @Override
             public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-                String key = MainListActivity.this.parent.get(groupPosition);
+                String key = MainListActivity.this.mparent.get(groupPosition);
                 String info = map.get(key).get(childPosition);
                 if (convertView == null) {
                     LayoutInflater inflater = (LayoutInflater) MainListActivity.this
@@ -156,7 +155,7 @@ public class MainListActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setClass(MainListActivity.this,ScrollingActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("lesson","try");
+                bundle.putSerializable("lesson_title",mparent.get(groupPosition));
                 intent.putExtras(bundle);
                 startActivity(intent);
                 return true;
