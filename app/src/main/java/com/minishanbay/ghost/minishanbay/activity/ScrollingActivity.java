@@ -1,5 +1,6 @@
-package com.minishanbay.ghost.minishanbay;
+package com.minishanbay.ghost.minishanbay.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.minishanbay.ghost.minishanbay.R;
 
 public class ScrollingActivity extends AppCompatActivity {
 
@@ -26,6 +29,8 @@ public class ScrollingActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        Intent intent = getIntent();
     }
 
     @Override

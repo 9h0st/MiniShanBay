@@ -7,7 +7,8 @@
     tools:showIn="@layout/activity_scrolling"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.minishanbay.ghost.minishanbay.ScrollingActivity">
+    tools:context=".activity.ScrollingActivity"
+    android:background="@color/gray_back">
 
     <TextView
         android:layout_width="wrap_content"
