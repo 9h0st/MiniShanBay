@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.minishanbay.ghost.minishanbay.R;
 import com.minishanbay.ghost.minishanbay.dao.LessonInfo;
 import com.minishanbay.ghost.minishanbay.dao.WordLevel;
 import com.minishanbay.ghost.minishanbay.entity.Lesson;
+import com.minishanbay.ghost.minishanbay.view.RounderBackgroundSpan;
 import com.minishanbay.ghost.minishanbay.view.SlideBar;
 import com.minishanbay.ghost.minishanbay.view.TextSpan;
 
@@ -50,7 +52,7 @@ public class ScrollingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (isHighLighted == false && lesson_type == 0) {
                     String target = TextSpan.getTarget(getApplicationContext().getResources(), String.valueOf(lesson_id + 1));
-                    SpannableStringBuilder spannable = TextSpan.highLight(lesson.getText(), target);
+                    SpannableStringBuilder spannable = TextSpan.highLight(lesson.getText(), target,getApplicationContext());
                     content_scrolling.setText(spannable);
                     isHighLighted = true;
                 } else if (lesson_type == 0 && isHighLighted == true) {
@@ -165,7 +167,8 @@ public class ScrollingActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            SpannableStringBuilder spannable = TextSpan.highLight(lesson.getText(), target);
+            SpannableStringBuilder spannable = TextSpan.highLight(lesson.getText(), target,getApplicationContext());
+
             return spannable;
         }
 

@@ -32,14 +32,11 @@ public class WordLevel {
             String column[] = tmp.split("\\s+");
             int level = -1;
             if(column != null && column.length == 2){
-
                 level = Integer.valueOf(column[column.length - 1]);
-
                 for (int i = 0; i < column.length - 1;i++){
                     words.add(new Word(column[i],level));
                 }
             }
-
         }
         return words;
 

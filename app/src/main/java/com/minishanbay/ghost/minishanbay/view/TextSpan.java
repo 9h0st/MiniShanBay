@@ -1,5 +1,6 @@
 package com.minishanbay.ghost.minishanbay.view;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.text.Spannable;
@@ -48,7 +49,7 @@ public class TextSpan {
         return target;
     }
 
-    public static SpannableStringBuilder highLight(String text,String target){
+    public static SpannableStringBuilder highLight(String text, String target, Context context){
         SpannableStringBuilder spannable = new SpannableStringBuilder(text);
         CharacterStyle span = null;
         Pattern pattern = Pattern.compile(target);
@@ -56,8 +57,9 @@ public class TextSpan {
         while (matcher.find()){
 
             span = new BackgroundColorSpan(Color.parseColor("#209e85"));
-            spannable.setSpan(span,matcher.start(),matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new ForegroundColorSpan(Color.WHITE),matcher.start(),matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            //spannable.setSpan(span,matcher.start(),matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            //spannable.setSpan(new ForegroundColorSpan(Color.WHITE),matcher.start(),matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new RounderBackgroundSpan(context),matcher.start(),matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return spannable;
     }
