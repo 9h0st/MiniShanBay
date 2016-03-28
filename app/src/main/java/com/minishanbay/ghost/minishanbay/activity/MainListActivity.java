@@ -13,6 +13,7 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.minishanbay.ghost.minishanbay.R;
+import com.minishanbay.ghost.minishanbay.entity.Lesson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,8 +28,10 @@ public class MainListActivity extends AppCompatActivity {
     private List<String> mparent = null;
     Map<String,List<String>> map = null;
 
+    private List<Lesson> lessons = new ArrayList<Lesson>();
 
     public void initData() {
+
         mparent = new ArrayList<String>();
         mparent.add("Lesson1");
         mparent.add("Lesson2");
@@ -59,6 +62,7 @@ public class MainListActivity extends AppCompatActivity {
         list4.add("能看见东西的手");
         list4.add("New words and expressions");
         map.put("Lesson4",list4);
+
     }
 
 
@@ -153,20 +157,29 @@ public class MainListActivity extends AppCompatActivity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 Intent intent = new Intent();
-                intent.setClass(MainListActivity.this,ScrollingActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("lesson_title",mparent.get(groupPosition));
-                intent.putExtras(bundle);
-                startActivity(intent);
+                if(childPosition < 2) {
+                    intent.setClass(MainListActivity.this, ScrollingActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("lesson_title", mparent.get(groupPosition));
+                    bundle.putSerializable("lesson_id", groupPosition);
+                    bundle.putSerializable("lesson_type", childPosition);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+
+                }else if(childPosition == 2){
+                    intent.setClass(MainListActivity.this,WordListActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("lesson_title",mparent.get(groupPosition));
+                    bundle.putSerializable("lesson_id",groupPosition);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
                 return true;
             }
         });
 
 
     }
-
-
-
 
 }
 

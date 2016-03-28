@@ -21,7 +21,9 @@
         <activity android:name=".activity.ScrollingActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/lesson_title"/>
-
+        <activity android:name=".activity.WordListActivity"
+            android:theme="@style/AppTheme"
+            android:label="@string/lesson_title"/>
     </application>
 
 </manifest>

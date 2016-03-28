@@ -10,10 +10,11 @@
     tools:context=".activity.ScrollingActivity"
     android:background="@color/gray_back">
 
-    <TextView
+    <com.athkalia.emphasis.EmphasisTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
+        android:id="@+id/content_scrolling"
         android:text="@string/large_text" />
 
 </android.support.v4.widget.NestedScrollView>

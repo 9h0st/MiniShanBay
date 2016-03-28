@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">MiniShanBay</string>
     <string name="listactivity_bar">课程查看</string>
-    <string name="lesson_title">%1$s</string>
+    <string name="lesson_title">Lesson0</string>
+
+    <string name="chinese">查看译文</string>
+    <string name="english">查看原文</string>
+    <string name="vocanbulary">查看翻译</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
