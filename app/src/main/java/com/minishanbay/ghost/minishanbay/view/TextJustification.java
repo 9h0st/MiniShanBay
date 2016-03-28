@@ -16,18 +16,20 @@ public class TextJustification {
         String resultText = "";
         Paint paint=textView.getPaint();
 
-        ArrayList<String> paraList;
+        ArrayList<String> paraList = new ArrayList<String>();
         paraList = paraBreak(text,textView);
         for(int i = 0; i<paraList.size(); i++) {
             ArrayList<String> lineList=lineBreak(paraList.get(i).trim(),paint,contentWidth);
             tempText = TextUtils.join(" ", lineList).replaceFirst("\\s*", "");
             resultText += tempText.replaceFirst("\\s*", "") + "\n";
         }
+
         textView.setText(resultText);
+//        return resultText;
     }
     //分开每个段落
-    public static ArrayList<String> paraBreak(String text,TextView textView) {
-        ArrayList<String> paraList = new ArrayList<>();
+    public static ArrayList<String> paraBreak(String text, TextView textview) {
+        ArrayList<String> paraList = new ArrayList<String>();
         String[] paraArray = text.split("\\n+");
         for(String para:paraArray) {
             paraList.add(para);
@@ -38,11 +40,12 @@ public class TextJustification {
     //分开每一行，使每一行填入最多的单词数
     private static ArrayList<String> lineBreak(String text, Paint paint, float contentWidth){
         String [] wordArray=text.split("\\s");
-        ArrayList<String> lineList = new ArrayList<>();
+        ArrayList<String> lineList = new ArrayList<String>();
         String myText="";
-
         for(String word:wordArray){
-            if(paint.measureText(myText+" "+word)<=contentWidth)
+            if (myText.equals("")){
+                myText=myText+word;
+            }else if(paint.measureText(myText+" "+word)<=contentWidth)
                 myText=myText+" "+word;
             else{
                 int totalSpacesToInsert=(int)((contentWidth-paint.measureText(myText))/paint.measureText(" "));
@@ -56,7 +59,7 @@ public class TextJustification {
     //已填入最多单词数的一行，插入对应的空格数直到该行满
     private static String justifyLine(String text,int totalSpacesToInsert){
         String[] wordArray=text.split("\\s");
-        String toAppend=" ";
+        String toAppend="";
 
         while((totalSpacesToInsert)>=(wordArray.length-1)){
             toAppend=toAppend+" ";
@@ -66,17 +69,15 @@ public class TextJustification {
         String justifiedText="";
         for(String word:wordArray){
             if(i<totalSpacesToInsert)
-                justifiedText=justifiedText+word+" "+toAppend;
-
+                justifiedText=justifiedText+word+" "+toAppend+" ";
             else
-                justifiedText=justifiedText+word+toAppend;
-
+                justifiedText=justifiedText+word+" "+toAppend;
             i++;
         }
-//        int j ;
-//        for (j=justifiedText.length()-1;justifiedText.charAt(j)==' ';j--){
-//
-//        }
-        return justifiedText;//.substring(0,j+1);
+        int j ;
+        for (j=justifiedText.length()-1;justifiedText.charAt(j)==' ';j--){
+
+        }
+        return justifiedText.substring(0,j+1);
     }
 }

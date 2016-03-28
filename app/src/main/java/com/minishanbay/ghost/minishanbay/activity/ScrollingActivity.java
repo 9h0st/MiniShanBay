@@ -3,7 +3,6 @@ package com.minishanbay.ghost.minishanbay.activity;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -46,6 +45,8 @@ public class ScrollingActivity extends AppCompatActivity {
     private TextView ChildTitle;
     static Point size;
     static float density;
+    private String childtitle_text;
+    private int measuredWidth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class ScrollingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //设置fab按钮的动作
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,16 +75,21 @@ public class ScrollingActivity extends AppCompatActivity {
             }
         });
 
+        //获取传递过来的课程信息
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras().isEmpty() ? new Bundle() : intent.getExtras();
         title = bundle.get("lesson_title") == null ? "Lesson Fault" : (String) bundle.get("lesson_title");
         lesson_id = bundle.getInt("lesson_id");
         lesson_type = bundle.getInt("lesson_type");
-        String childtitle_text = bundle.getString("lesson_childtitle");
+        childtitle_text = bundle.getString("lesson_childtitle");
+
+        //设置文章标题
         this.setTitle(title);
         ChildTitle = (TextView) findViewById(R.id.childtitle);
         ChildTitle.setText(childtitle_text);
         float_num = (TextView) findViewById(R.id.float_num);
+
+        //设置Slide-Bar
         slideBar = (SlideBar) findViewById(R.id.slidebar);
         slideBar.setSlide_text(float_num);
         slideBar.setOnTouchNumChangeListener(new SlideBar.onTouchNumListener() {
@@ -103,6 +110,8 @@ public class ScrollingActivity extends AppCompatActivity {
 
             }
         });
+
+        //从文件夹中获取课程信息
         subLayout = findViewById(R.id.scroll_layout);
         lessonInfo = new LessonInfo();
         try {
@@ -128,35 +137,28 @@ public class ScrollingActivity extends AppCompatActivity {
 
         //显示课文内容 0为英文原文 1为中文翻译
         if (lesson_type == 0) {
-//            content_scrolling.setLineSpacing(0f,1.2f);
-//            content_scrolling.setTextSize(8*(float)width/320f);
-            content_scrolling.setText(lesson.getText());
-//            content_scrolling.setTextSize(8*(float)width/320f);
-            final String[] fiText = new String[1];
-            vto.addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
-                @Override
-                public void onGlobalFocusChanged(View oldFocus, View newFocus) {
-                    TextJustification.justify(content_scrolling,content_scrolling.getMeasuredWidth());
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        content_scrolling.getViewTreeObserver().removeOnGlobalLayoutListener((ViewTreeObserver.OnGlobalLayoutListener) ScrollingActivity.this);
-                    }
 
+            content_scrolling.setText(lesson.getText());
+
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    measuredWidth = content_scrolling.getMeasuredWidth();
+                    //TextJustification.justify(content_scrolling,content_scrolling.getMeasuredWidth());
+                    Log.i("width",content_scrolling.getMeasuredWidth()+"");
                 }
             });
-            SpannableStringBuilder ssb = new SpannableStringBuilder(content_scrolling.getText().toString());
-
-            content_scrolling.setText(ssb, TextView.BufferType.SPANNABLE);
-            ClickSpan.getEachWord(content_scrolling);
-            content_scrolling.setMovementMethod(LinkMovementMethod.getInstance());
-
-
-
+            new WordSpanTask().execute();
+//            Log.i("justified_text",content_scrolling.getText().toString());
+//            SpannableStringBuilder ssb = new SpannableStringBuilder(content_scrolling.getText());
+//
+//            content_scrolling.setText(ssb, TextView.BufferType.SPANNABLE);
+//            ClickSpan.getEachWord(content_scrolling);
+//            content_scrolling.setMovementMethod(LinkMovementMethod.getInstance());
 
         } else if (lesson_type == 1)
             content_scrolling.setText(lesson.getText_chinese());
 
-//        content_scrolling.getDocumentLayoutParams().setHyphenator(SqueezeHyphenator.getInstance());
-//        content_scrolling.getDocumentLayoutParams().setHyphenated(true);
     }
 
     @Override
@@ -175,6 +177,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
 
+        //选择同一文章的不同类别
         switch (id) {
             case R.id.action_english:
                 content_scrolling.setText(lesson.getText());
@@ -188,6 +191,7 @@ public class ScrollingActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("lesson_title", title);
                 bundle.putSerializable("lesson_id", lesson_type);
+                bundle.putSerializable("lesson_childtitle",childtitle_text);
                 intent.putExtras(bundle);
                 startActivity(intent);
                 return true;
@@ -197,14 +201,6 @@ public class ScrollingActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-//    public void show_lesson_englishView() {
-//
-//    }
-//
-//    public void show_lesson_chineseView() {
-//
-//    }
 
     class LessonTask extends AsyncTask<Integer, Integer, SpannableStringBuilder> {
 
@@ -232,18 +228,24 @@ public class ScrollingActivity extends AppCompatActivity {
         }
     }
 
-    class WordSpanTask extends AsyncTask<Integer, Integer, SpannableStringBuilder> {
+    class WordSpanTask extends AsyncTask<Void, Integer, Boolean> {
+
 
         @Override
-        protected SpannableStringBuilder doInBackground(Integer... params) {
-            return null;
+        protected Boolean doInBackground(Void... params) {
+            return true;
         }
 
         @Override
-        protected void onPostExecute(SpannableStringBuilder ssb) {
-
+        protected void onPostExecute(Boolean isDone) {
+            if (isDone) {
+                TextJustification.justify(content_scrolling, measuredWidth);
+                SpannableStringBuilder ssb = new SpannableStringBuilder(content_scrolling.getText());
+                content_scrolling.setText(ssb, TextView.BufferType.SPANNABLE);
+                ClickSpan.getEachWord(content_scrolling);
+                content_scrolling.setMovementMethod(LinkMovementMethod.getInstance());
+            }
         }
-
     }
 
 }
