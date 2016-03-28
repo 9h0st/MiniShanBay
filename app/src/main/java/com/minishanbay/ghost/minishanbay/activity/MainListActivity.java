@@ -161,6 +161,7 @@ public class MainListActivity extends AppCompatActivity {
                     intent.setClass(MainListActivity.this, ScrollingActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("lesson_title", mparent.get(groupPosition));
+                    bundle.putSerializable("lesson_childtitle",map.get(mparent.get(groupPosition)).get(childPosition));
                     bundle.putSerializable("lesson_id", groupPosition);
                     bundle.putSerializable("lesson_type", childPosition);
                     intent.putExtras(bundle);
@@ -169,6 +170,7 @@ public class MainListActivity extends AppCompatActivity {
                 }else if(childPosition == 2){
                     intent.setClass(MainListActivity.this,WordListActivity.class);
                     Bundle bundle = new Bundle();
+                    bundle.putSerializable("lesson_childtitle",map.get(mparent.get(groupPosition)).get(childPosition));
                     bundle.putSerializable("lesson_title",mparent.get(groupPosition));
                     bundle.putSerializable("lesson_id",groupPosition);
                     intent.putExtras(bundle);

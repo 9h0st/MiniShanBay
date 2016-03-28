@@ -18,10 +18,16 @@ public class RounderBackgroundSpan extends ReplacementSpan {
     private int backgroundColor = 0;
     private int textColor = 0;
 
-    public RounderBackgroundSpan(Context context) {
+    public RounderBackgroundSpan() {
         super();
         backgroundColor = Color.parseColor("#209e85");
         textColor = Color.WHITE;
+    }
+
+    public RounderBackgroundSpan(boolean t) {
+        super();
+        backgroundColor = Color.TRANSPARENT;
+        textColor = Color.BLACK;
     }
     @Override
     public int getSize(Paint paint, CharSequence text, int start, int end, Paint.FontMetricsInt fm) {

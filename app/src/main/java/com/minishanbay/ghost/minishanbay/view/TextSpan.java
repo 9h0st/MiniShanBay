@@ -1,19 +1,12 @@
 package com.minishanbay.ghost.minishanbay.view;
 
-import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.CharacterStyle;
-import android.text.style.ForegroundColorSpan;
 
 import com.minishanbay.ghost.minishanbay.dao.WordLevel;
 import com.minishanbay.ghost.minishanbay.entity.Word;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,17 +42,17 @@ public class TextSpan {
         return target;
     }
 
-    public static SpannableStringBuilder highLight(String text, String target, Context context){
+    public static SpannableStringBuilder highLight(String text, String target){
         SpannableStringBuilder spannable = new SpannableStringBuilder(text);
-        CharacterStyle span = null;
+//        CharacterStyle span = null;
         Pattern pattern = Pattern.compile(target);
         Matcher matcher = pattern.matcher(text);
         while (matcher.find()){
 
-            span = new BackgroundColorSpan(Color.parseColor("#209e85"));
+            //span = new BackgroundColorSpan(Color.parseColor("#209e85"));
             //spannable.setSpan(span,matcher.start(),matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             //spannable.setSpan(new ForegroundColorSpan(Color.WHITE),matcher.start(),matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new RounderBackgroundSpan(context),matcher.start(),matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new RounderBackgroundSpan(),matcher.start(),matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return spannable;
     }
