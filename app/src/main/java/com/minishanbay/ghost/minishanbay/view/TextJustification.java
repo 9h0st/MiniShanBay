@@ -2,6 +2,7 @@ package com.minishanbay.ghost.minishanbay.view;
 
 import android.graphics.Paint;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class TextJustification {
             tempText = TextUtils.join(" ", lineList).replaceFirst("\\s*", "");
             resultText += tempText.replaceFirst("\\s*", "") + "\n";
         }
-
+        Log.i("resultText",resultText);
         textView.setText(resultText);
 //        return resultText;
     }

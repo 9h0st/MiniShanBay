@@ -1,35 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_scrolling"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gray_back"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activity.ScrollingActivity"
-    android:background="@color/gray_back">
+    tools:showIn="@layout/activity_scrolling">
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/lesson_title"
-        android:id="@+id/childtitle"
-        android:layout_margin="@dimen/text_margin"
-        android:textSize="20sp"
-        android:shadowColor="@color/colorPrimary"
-        android:gravity="center" />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:id="@+id/content_scrolling"
-        android:text="@string/large_text"
-        android:textSize="17sp"
-        android:textColor="#000000"/>
+
+        <TextView
+            android:id="@+id/childtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/text_margin"
+            android:gravity="center"
+            android:shadowColor="@color/colorPrimary"
+            android:text="@string/lesson_title"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/content_scrolling"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/large_text"
+            android:textColor="#000000"
+            android:textSize="17sp" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

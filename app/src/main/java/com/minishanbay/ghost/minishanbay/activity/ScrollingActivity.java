@@ -2,6 +2,7 @@ package com.minishanbay.ghost.minishanbay.activity;
 
 import android.content.Intent;
 import android.graphics.Point;
+import android.media.audiofx.Visualizer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -47,6 +48,7 @@ public class ScrollingActivity extends AppCompatActivity {
     static float density;
     private String childtitle_text;
     private int measuredWidth;
+    private boolean isAdd = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,12 +145,17 @@ public class ScrollingActivity extends AppCompatActivity {
             vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
-                    measuredWidth = content_scrolling.getMeasuredWidth();
-                    //TextJustification.justify(content_scrolling,content_scrolling.getMeasuredWidth());
-                    Log.i("width",content_scrolling.getMeasuredWidth()+"");
+                    if(isAdd == false) {
+                        measuredWidth = content_scrolling.getMeasuredWidth();
+                        //TextJustification.justify(content_scrolling,content_scrolling.getMeasuredWidth());
+                        Log.i("width", measuredWidth + "");
+                        new WordSpanTask().execute();
+                        isAdd = true;
+                    }
                 }
             });
-            new WordSpanTask().execute();
+
+//            new WordSpanTask().execute();
 //            Log.i("justified_text",content_scrolling.getText().toString());
 //            SpannableStringBuilder ssb = new SpannableStringBuilder(content_scrolling.getText());
 //
@@ -239,7 +246,10 @@ public class ScrollingActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean isDone) {
             if (isDone) {
+                Log.i("justifynow",""+isDone);
+                Log.i("measureWidth0", measuredWidth+"");
                 TextJustification.justify(content_scrolling, measuredWidth);
+                Log.i("measureWidth", measuredWidth+"");
                 SpannableStringBuilder ssb = new SpannableStringBuilder(content_scrolling.getText());
                 content_scrolling.setText(ssb, TextView.BufferType.SPANNABLE);
                 ClickSpan.getEachWord(content_scrolling);
