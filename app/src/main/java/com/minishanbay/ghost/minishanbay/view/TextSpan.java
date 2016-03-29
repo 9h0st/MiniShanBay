@@ -3,6 +3,7 @@ package com.minishanbay.ghost.minishanbay.view;
 import android.content.res.Resources;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.widget.TextView;
 
 import com.minishanbay.ghost.minishanbay.dao.WordLevel;
 import com.minishanbay.ghost.minishanbay.entity.Word;
@@ -47,6 +48,21 @@ public class TextSpan {
 //        CharacterStyle span = null;
         Pattern pattern = Pattern.compile(target);
         Matcher matcher = pattern.matcher(text);
+        while (matcher.find()){
+
+            //span = new BackgroundColorSpan(Color.parseColor("#209e85"));
+            //spannable.setSpan(span,matcher.start(),matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            //spannable.setSpan(new ForegroundColorSpan(Color.WHITE),matcher.start(),matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new RounderBackgroundSpan(),matcher.start(),matcher.end(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+        return spannable;
+    }
+
+    public static SpannableStringBuilder highLight(TextView text, String target){
+        SpannableStringBuilder spannable = new SpannableStringBuilder(text.getText());
+//        CharacterStyle span = null;
+        Pattern pattern = Pattern.compile(target);
+        Matcher matcher = pattern.matcher(text.getText());
         while (matcher.find()){
 
             //span = new BackgroundColorSpan(Color.parseColor("#209e85"));

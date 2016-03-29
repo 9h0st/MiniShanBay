@@ -24,7 +24,7 @@ public class TextJustification {
             tempText = TextUtils.join(" ", lineList).replaceFirst("\\s*", "");
             resultText += tempText.replaceFirst("\\s*", "") + "\n";
         }
-        Log.i("resultText",resultText);
+//        Log.i("resultText",resultText);
         textView.setText(resultText);
 //        return resultText;
     }
@@ -41,7 +41,7 @@ public class TextJustification {
     //分开每一行，使每一行填入最多的单词数
     private static ArrayList<String> lineBreak(String text, Paint paint, float contentWidth){
         String [] wordArray=text.split("\\s");
-        ArrayList<String> lineList = new ArrayList<String>();
+        ArrayList<String> lineList = new ArrayList<>();
         String myText="";
         for(String word:wordArray){
             if (myText.equals("")){

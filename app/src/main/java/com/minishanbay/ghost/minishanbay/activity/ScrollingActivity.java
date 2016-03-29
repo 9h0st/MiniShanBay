@@ -2,7 +2,6 @@ package com.minishanbay.ghost.minishanbay.activity;
 
 import android.content.Intent;
 import android.graphics.Point;
-import android.media.audiofx.Visualizer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -49,6 +48,7 @@ public class ScrollingActivity extends AppCompatActivity {
     private String childtitle_text;
     private int measuredWidth;
     private boolean isAdd = false;
+    private boolean isSlideTouched = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,20 +58,21 @@ public class ScrollingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //设置fab按钮的动作
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isHighLighted == false && lesson_type == 0) {
                     String target = TextSpan.getTarget(getApplicationContext().getResources(), String.valueOf(lesson_id + 1));
-                    SpannableStringBuilder spannable = TextSpan.highLight(lesson.getText(), target);
+                    SpannableStringBuilder spannable = TextSpan.highLight(content_scrolling, target);
                     content_scrolling.setText(spannable);
                     isHighLighted = true;
                 } else if (lesson_type == 0 && isHighLighted == true) {
-                    SpannableStringBuilder ssb = new SpannableStringBuilder(content_scrolling.getText().toString());
-                    content_scrolling.setText(ssb, TextView.BufferType.SPANNABLE);
-                    ClickSpan.getEachWord(content_scrolling);
-                    content_scrolling.setMovementMethod(LinkMovementMethod.getInstance());
+//                    SpannableStringBuilder ssb = new SpannableStringBuilder(content_scrolling.getText().toString());
+//                    content_scrolling.setText(ssb, TextView.BufferType.SPANNABLE);
+//                    ClickSpan.getEachWord(content_scrolling);
+//                    content_scrolling.setMovementMethod(LinkMovementMethod.getInstance());
+                    new WordSpanTask().execute();
                     isHighLighted = false;
                 }
             }
@@ -97,21 +98,25 @@ public class ScrollingActivity extends AppCompatActivity {
         slideBar.setOnTouchNumChangeListener(new SlideBar.onTouchNumListener() {
             @Override
             public void onTouchNumChanged(String s) {
-                level = -1;
-                try {
-                    level = Integer.parseInt(s);
-                    if (level >= 0 && level <= 5) {
-                        new LessonTask().execute();
-                    } else {
+                if (lesson_type == 0) {
+                    level = -1;
+                    isSlideTouched = true;
+                    try {
+                        level = Integer.parseInt(s);
+                        if (level >= 0 && level <= 5) {
+                            new LessonTask().execute();
+                        } else {
+                            return;
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
                         return;
                     }
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                    return;
                 }
-
             }
+
         });
+
 
         //从文件夹中获取课程信息
         subLayout = findViewById(R.id.scroll_layout);
@@ -124,7 +129,7 @@ public class ScrollingActivity extends AppCompatActivity {
         }
         content_scrolling = (TextView) subLayout.findViewById(R.id.content_scrolling);
 //        content_scrolling.getDocumentLayoutParams().setTextAlignment(TextAlignment.JUSTIFIED);
-//
+
         Display display = getWindowManager().getDefaultDisplay();
         size = new Point();
         DisplayMetrics dm = new DisplayMetrics();
@@ -139,13 +144,13 @@ public class ScrollingActivity extends AppCompatActivity {
 
         //显示课文内容 0为英文原文 1为中文翻译
         if (lesson_type == 0) {
-
+            lesson.setTitle(childtitle_text);
             content_scrolling.setText(lesson.getText());
 
             vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
-                    if(isAdd == false) {
+                    if (isAdd == false) {
                         measuredWidth = content_scrolling.getMeasuredWidth();
                         //TextJustification.justify(content_scrolling,content_scrolling.getMeasuredWidth());
                         Log.i("width", measuredWidth + "");
@@ -163,9 +168,21 @@ public class ScrollingActivity extends AppCompatActivity {
 //            ClickSpan.getEachWord(content_scrolling);
 //            content_scrolling.setMovementMethod(LinkMovementMethod.getInstance());
 
-        } else if (lesson_type == 1)
+        } else if (lesson_type == 1) {
+            lesson.setTitle_chinese(childtitle_text);
             content_scrolling.setText(lesson.getText_chinese());
+        }
 
+
+        content_scrolling.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isSlideTouched == true) {
+                    new WordSpanTask().execute();
+                    isSlideTouched = false;
+                }
+            }
+        });
     }
 
     @Override
@@ -187,10 +204,30 @@ public class ScrollingActivity extends AppCompatActivity {
         //选择同一文章的不同类别
         switch (id) {
             case R.id.action_english:
+                lesson_type = 0;
                 content_scrolling.setText(lesson.getText());
+//                ChildTitle.setText(lesson.getTitle());
+                measuredWidth = content_scrolling.getMeasuredWidth();
+                new WordSpanTask().execute();
+//                ViewTreeObserver vto = content_scrolling.getViewTreeObserver();
+//                vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//                    @Override
+//                    public void onGlobalLayout() {
+//                        if (isAdd == false) {
+//                            measuredWidth = content_scrolling.getMeasuredWidth();
+//                            //TextJustification.justify(content_scrolling,content_scrolling.getMeasuredWidth());
+//                            Log.i("width", measuredWidth + "");
+//                            new WordSpanTask().execute();
+//                            isAdd = true;
+//                        }
+//                    }
+//                });
                 return true;
             case R.id.action_chinese:
+                lesson_type = 1;
+//                ChildTitle.setText(lesson.getTitle_chinese());
                 content_scrolling.setText(lesson.getText_chinese());
+//                new WordSpanTask().execute();
                 return true;
             case R.id.action_volcanbulary:
                 Intent intent = new Intent();
@@ -198,7 +235,7 @@ public class ScrollingActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("lesson_title", title);
                 bundle.putSerializable("lesson_id", lesson_type);
-                bundle.putSerializable("lesson_childtitle",childtitle_text);
+                bundle.putSerializable("lesson_childtitle", childtitle_text);
                 intent.putExtras(bundle);
                 startActivity(intent);
                 return true;
@@ -209,24 +246,26 @@ public class ScrollingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    class LessonTask extends AsyncTask<Integer, Integer, SpannableStringBuilder> {
+    class LessonTask extends AsyncTask<Integer, Integer, String> {
 
         @Override
-        protected SpannableStringBuilder doInBackground(Integer... params) {
+        protected String doInBackground(Integer... params) {
             String target = null;
             try {
                 target = TextSpan.getTarget(level, WordLevel.getAllWordLevel(getApplicationContext().getResources()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            SpannableStringBuilder spannable = TextSpan.highLight(lesson.getText(), target);
 
-            return spannable;
+            return target;
         }
 
         @Override
-        protected void onPostExecute(SpannableStringBuilder s) {
-            content_scrolling.setText(s);
+        protected void onPostExecute(String target) {
+            TextJustification.justify(content_scrolling, measuredWidth);
+            SpannableStringBuilder spannable = TextSpan.highLight(content_scrolling, target);
+            content_scrolling.setText(spannable);
+
         }
 
         @Override
@@ -246,10 +285,10 @@ public class ScrollingActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean isDone) {
             if (isDone) {
-                Log.i("justifynow",""+isDone);
-                Log.i("measureWidth0", measuredWidth+"");
+//                Log.i("justifynow",""+isDone);
+//                Log.i("measureWidth0", measuredWidth+"");
                 TextJustification.justify(content_scrolling, measuredWidth);
-                Log.i("measureWidth", measuredWidth+"");
+//                Log.i("measureWidth", measuredWidth+"");
                 SpannableStringBuilder ssb = new SpannableStringBuilder(content_scrolling.getText());
                 content_scrolling.setText(ssb, TextView.BufferType.SPANNABLE);
                 ClickSpan.getEachWord(content_scrolling);

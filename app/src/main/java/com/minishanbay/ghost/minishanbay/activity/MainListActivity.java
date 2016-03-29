@@ -162,6 +162,7 @@ public class MainListActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("lesson_title", mparent.get(groupPosition));
                     bundle.putSerializable("lesson_childtitle",map.get(mparent.get(groupPosition)).get(childPosition));
+
                     bundle.putSerializable("lesson_id", groupPosition);
                     bundle.putSerializable("lesson_type", childPosition);
                     intent.putExtras(bundle);

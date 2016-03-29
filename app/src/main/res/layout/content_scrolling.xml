@@ -19,11 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/text_margin"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginRight="@dimen/text_margin"
+            android:layout_marginTop="@dimen/text_margin"
             android:gravity="center"
             android:shadowColor="@color/colorPrimary"
             android:text="@string/lesson_title"
-            android:textSize="20sp" />
+            android:textSize="25dp"
+            android:textColor="#1b3803"/>
 
         <TextView
             android:id="@+id/content_scrolling"
@@ -32,6 +35,6 @@
             android:layout_margin="@dimen/text_margin"
             android:text="@string/large_text"
             android:textColor="#000000"
-            android:textSize="17sp" />
+            android:textSize="17dp" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
